@@ -39,7 +39,9 @@
             <input type="text" id="pName" placeholder="اسم الصنف">
             <input type="number" id="pPrice" placeholder="السعر">
             <input type="text" id="pDesc" placeholder="المكونات">
-            <input type="text" id="pImg" placeholder="رابط صورة الصنف">
+            <p>صورة الصنف:</p>
+            <input type="file" id="pImgFile" accept="image/*">
+            <input type="hidden" id="pImgHidden">
             <button class="btn-save" id="saveBtn" onclick="window.saveProduct()">حفظ الصنف ونشره</button>
             <hr><h3>الأصناف الحالية</h3><div id="productsList"></div>
         </div>
@@ -106,7 +108,7 @@
             document.getElementById('pName').value = item.name;
             document.getElementById('pPrice').value = item.price;
             document.getElementById('pDesc').value = item.desc || "";
-            document.getElementById('pImg').value = item.img || "";
+            document.getElementById('pImgHidden').value = item.img || "";
             document.getElementById('formTitle').innerText = "تعديل صنف";
             document.getElementById('saveBtn').innerText = "تحديث البيانات";
         };
@@ -115,23 +117,38 @@
         window.completeOrder = (key) => remove(ref(db, 'orders/' + key));
 
         window.saveProduct = async function() {
-            const data = { 
-                name: document.getElementById('pName').value, 
-                price: document.getElementById('pPrice').value, 
-                desc: document.getElementById('pDesc').value, 
-                img: document.getElementById('pImg').value 
+            const name = document.getElementById('pName').value;
+            const price = document.getElementById('pPrice').value;
+            const desc = document.getElementById('pDesc').value;
+            const fileInput = document.getElementById('pImgFile');
+            
+            if(!name || !price) return alert("اكتب اسم وسعر الصنف!");
+
+            const executeSave = (imageUrl) => {
+                const data = { name, price, desc, img: imageUrl };
+                if(editKey) {
+                    update(ref(db, 'products/' + editKey), data);
+                    editKey = null;
+                    document.getElementById('formTitle').innerText = "إضافة صنف جديد";
+                    document.getElementById('saveBtn').innerText = "حفظ الصنف ونشره";
+                } else {
+                    push(ref(db, 'products'), data);
+                }
+                document.getElementById('pName').value = ''; 
+                document.getElementById('pPrice').value = ''; 
+                document.getElementById('pDesc').value = '';
+                fileInput.value = '';
+                document.getElementById('pImgHidden').value = '';
+                alert("تم الحفظ!");
             };
-            if(!data.name || !data.price) return alert("اكتب اسم وسعر الصنف!");
-            if(editKey) {
-                await update(ref(db, 'products/' + editKey), data);
-                editKey = null;
-                document.getElementById('formTitle').innerText = "إضافة صنف جديد";
-                document.getElementById('saveBtn').innerText = "حفظ الصنف ونشره";
+
+            if(fileInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = (e) => executeSave(e.target.result);
+                reader.readAsDataURL(fileInput.files[0]);
             } else {
-                await push(ref(db, 'products'), data);
+                executeSave(document.getElementById('pImgHidden').value);
             }
-            document.getElementById('pName').value = ''; document.getElementById('pPrice').value = ''; 
-            document.getElementById('pDesc').value = ''; document.getElementById('pImg').value = '';
         };
     </script>
 </body>
