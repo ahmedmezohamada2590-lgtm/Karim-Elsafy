@@ -3,105 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KARIM ELSAFY</title>
+    <title>مطعم كريم الصافي</title>
     <style>
-        /* التصميم السيمبل والراقي */
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; background-color: #ffffff; color: #1a1a1a; margin: 0; padding: 0; }
+        :root { --dark: #1c352d; --gold: #c5a059; --cream: #fbf8f2; }
+        body { background: var(--cream); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding-bottom: 70px; }
         
-        /* الهيدر */
-        header { padding: 40px 20px; text-align: center; border-bottom: 1px solid #eaeaea; }
-        .logo { font-size: 24px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; }
-        
-        /* الأصناف */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; padding: 40px 20px; max-width: 1000px; margin: auto; }
-        .card { text-align: center; }
-        .card img { width: 100%; height: 350px; object-fit: cover; background: #f9f9f9; }
-        .card h4 { font-size: 18px; font-weight: 400; margin: 20px 0 10px; }
-        .card .price { font-size: 14px; color: #666; margin-bottom: 20px; }
-        
-        /* زر الطلب */
-        .btn-order { background: transparent; border: 1px solid #1a1a1a; padding: 10px 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-        .btn-order:hover { background: #1a1a1a; color: #ffffff; }
+        /* السايد بار */
+        .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; right: 0; background-color: var(--dark); overflow-x: hidden; transition: 0.5s; padding-top: 60px; color: white; }
+        .sidebar .close-btn { position: absolute; top: 10px; left: 20px; font-size: 36px; cursor: pointer; color: var(--gold); }
+        .sidebar-content { padding: 20px; text-align: center; }
+        .sidebar-content a { display: block; color: white; padding: 15px; text-decoration: none; border-bottom: 1px solid #333; }
 
-        /* نموذج الطلب */
-        .modal { display: none; position: fixed; top:0; left:0; width: 100%; height: 100%; background: #fff; z-index: 1000; padding: 20px; box-sizing: border-box; }
-        .form-container { max-width: 500px; margin: 100px auto; }
-        input { width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #e0e0e0; border-radius: 0; box-sizing: border-box; }
-        
-        /* تسجيل الدخول */
-        #auth-screen { text-align: center; padding: 100px 20px; }
-        .btn-main { background: #1a1a1a; color: white; padding: 15px 40px; border: none; cursor: pointer; width: 100%; max-width: 300px; }
+        /* مودال الطلبات والطلب */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: #fff; margin: 15% auto; padding: 20px; width: 80%; border-radius: 15px; }
+        .modal-input { width: 90%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; }
+
+        /* باقي التصميم كما هو */
+        #auth-screen { padding: 30px; text-align: center; margin-top: 50px; }
+        .auth-input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid var(--gold); border-radius: 8px; }
+        .btn-main { background: var(--dark); color: white; width: 95%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .header { background: var(--dark); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--gold); }
+        .menu-icon { color: var(--gold); font-size: 28px; cursor: pointer; }
+        .logo-main { color: var(--gold); font-size: 24px; font-weight: bold; }
+        .logo-sub { color: white; font-size: 12px; letter-spacing: 2px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px; }
+        .card { background: white; border-radius: 12px; padding: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card img { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; background: #ddd; }
+        .price { color: var(--dark); font-weight: bold; font-size: 18px; }
+        .btn-order { background: var(--dark); color: white; width: 100%; padding: 8px; border: none; border-radius: 6px; cursor: pointer; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; background: var(--dark); color: white; border-top: 2px solid var(--gold); }
+        .nav-item { flex: 1; text-align: center; padding: 15px; cursor: pointer; }
     </style>
 </head>
 <body>
 
+    <!-- السايد بار -->
+    <div id="mySidebar" class="sidebar">
+        <span class="close-btn" onclick="closeSidebar()">&times;</span>
+        <div class="sidebar-content">
+            <h3>مرحبًا بك في مطعم كريم الصافي</h3>
+            <p>تواصل معنا:</p>
+            <a href="#">فيسبوك</a>
+            <a href="#">إنستجرام</a>
+            <a href="#">واتساب</a>
+        </div>
+    </div>
+
+    <!-- شاشة تسجيل الدخول -->
     <div id="auth-screen">
-        <h1 class="logo">Karim ElSafy</h1>
-        <input type="text" id="userName" placeholder="الاسم">
-        <input type="tel" id="userPhone" placeholder="رقم الهاتف">
-        <input type="password" id="userPass" placeholder="كلمة المرور">
+        <h2 style="color: var(--dark);">تسجيل الدخول</h2>
+        <input type="text" id="userName" class="auth-input" placeholder="الاسم بالكامل">
+        <input type="tel" id="userPhone" class="auth-input" placeholder="رقم التليفون">
+        <input type="password" id="userPass" class="auth-input" placeholder="كلمة السر">
         <button onclick="window.handleAuth()" class="btn-main">دخول</button>
     </div>
 
+    <!-- التطبيق -->
     <div id="main-app" style="display:none;">
-        <header>
-            <div class="logo">Karim ElSafy</div>
-        </header>
+        <div class="header">
+            <div class="menu-icon" onclick="openSidebar()">☰</div>
+            <div style="text-align:center;">
+                <div class="logo-main">KARIM ELSAFY</div>
+                <div class="logo-sub">RESTAURANT</div>
+            </div>
+            <div style="width: 28px;"></div>
+        </div>
 
         <div class="grid" id="menu-grid"></div>
+
+        <div class="bottom-nav">
+            <div class="nav-item" style="border-left: 1px solid #444;" onclick="location.reload()">الأصناف</div>
+            <div class="nav-item" onclick="loadMyOrders()">طلباتي</div>
+        </div>
     </div>
 
+    <!-- مودال الطلب -->
     <div id="orderModal" class="modal">
-        <div class="form-container">
-            <h3>إتمام الطلب</h3>
-            <input type="text" id="custName" placeholder="الاسم الكامل">
-            <input type="text" id="custAddress" placeholder="العنوان">
-            <input type="file" id="imageInput">
-            <button class="btn-order" style="width:100%" onclick="submitOrder()">تأكيد الطلب</button>
-            <p onclick="document.getElementById('orderModal').style.display='none'" style="cursor:pointer; text-align:center; margin-top:20px;">إلغاء</p>
+        <div class="modal-content">
+            <h3>تأكيد الطلب</h3>
+            <input type="text" id="modalName" class="modal-input" placeholder="الاسم" disabled>
+            <input type="text" id="modalAddress" class="modal-input" placeholder="العنوان">
+            <input type="text" id="modalTime" class="modal-input" placeholder="وقت الاستلام (مثال: 8:30)">
+            <p style="font-size:12px; color:red;">يرجى إرسال المبلغ على رقم فودافون كاش: 01012345678</p>
+            <input type="file" class="modal-input">
+            <button class="btn-main" onclick="submitOrder()">إرسال الطلب</button>
+            <button onclick="document.getElementById('orderModal').style.display='none'">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- مودال طلباتي -->
+    <div id="ordersModal" class="modal">
+        <div class="modal-content">
+            <h3>طلباتي</h3>
+            <div id="ordersList"></div>
+            <button onclick="document.getElementById('ordersModal').style.display='none'">إغلاق</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+        import { getDatabase, ref, set, get, push, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-        // Firebase Config (كما هو)
-        const firebaseConfig = { /* ... */ };
+        const firebaseConfig = { /* ... (نفس بياناتك) ... */ };
         const db = getDatabase(initializeApp(firebaseConfig));
+        
+        let currentUser = JSON.parse(localStorage.getItem('karimUser'));
+        let currentItem = {};
 
-        // التحقق من الدخول
-        if(localStorage.getItem('karimUser')) {
+        // التحكم في السايد بار
+        window.openSidebar = () => document.getElementById("mySidebar").style.width = "70%";
+        window.closeSidebar = () => document.getElementById("mySidebar").style.width = "0";
+
+        // تسجيل الدخول
+        window.handleAuth = async () => {
+            const name = document.getElementById('userName').value;
+            const phone = document.getElementById('userPhone').value;
+            if(!name || !phone) return alert("اكتب البيانات");
+            currentUser = { name, phone };
+            localStorage.setItem('karimUser', JSON.stringify(currentUser));
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
             loadMenu();
-        }
-
-        window.handleAuth = async function() {
-            const phone = document.getElementById('userPhone').value;
-            // ... (لوجيك الدخول)
-            localStorage.setItem('karimUser', JSON.stringify({phone}));
-            location.reload();
         };
 
-        function loadMenu() {
+        // تحميل المنيو
+        async function loadMenu() {
             const grid = document.getElementById('menu-grid');
-            const items = [{name: "بيض بالبسطرمة", price: "70 EGP"}, {name: "لانشون حلواني", price: "65 EGP"}];
-            items.forEach(item => {
-                grid.innerHTML += `
-                    <div class="card">
-                        <img src="https://via.placeholder.com/300" alt="${item.name}">
-                        <h4>${item.name}</h4>
-                        <div class="price">${item.price}</div>
-                        <button class="btn-order" onclick="document.getElementById('orderModal').style.display='block'">اطلب الآن</button>
-                    </div>
-                `;
-            });
+            // ... (نفس كود جلب المنتجات السابق)
+            // إضافة زر الطلب ليفتح المودال:
+            // onclick="openOrderModal('${item.name}', '${item.price}')"
         }
 
-        window.submitOrder = async function() {
-            alert("تم استلام طلبك");
+        window.openOrderModal = (name, price) => {
+            currentItem = { name, price };
+            document.getElementById('modalName').value = currentUser.name;
+            document.getElementById('orderModal').style.display = 'block';
+        };
+
+        window.submitOrder = async () => {
+            const orderData = {
+                customerName: currentUser.name,
+                customerPhone: currentUser.phone,
+                item: currentItem.name,
+                address: document.getElementById('modalAddress').value,
+                time: document.getElementById('modalTime').value,
+                status: 'قيد التحضير'
+            };
+            await push(ref(db, 'orders'), orderData);
+            alert("تم إرسال طلبك!");
             document.getElementById('orderModal').style.display = 'none';
+        };
+
+        window.loadMyOrders = async () => {
+            document.getElementById('ordersModal').style.display = 'block';
+            const ordersRef = query(ref(db, 'orders'), orderByChild('customerPhone'), equalTo(currentUser.phone));
+            const snapshot = await get(ordersRef);
+            const list = document.getElementById('ordersList');
+            list.innerHTML = '';
+            if(snapshot.exists()) {
+                snapshot.forEach(child => {
+                    const order = child.val();
+                    list.innerHTML += `<p>طلب: ${order.item} - الحالة: ${order.status}</p>`;
+                });
+            } else {
+                list.innerHTML = "لا يوجد طلبات حالية.";
+            }
+        };
+        
+        // تفعيل الإظهار عند الدخول
+        if(currentUser) { 
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            loadMenu(); 
         }
     </script>
 </body>
