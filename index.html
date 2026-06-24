@@ -14,43 +14,47 @@
         .sidebar-content { padding: 20px; text-align: center; }
         .sidebar-content a { display: block; color: white; padding: 15px; text-decoration: none; border-bottom: 1px solid #333; }
 
-        /* مودال الطلبات والطلب */
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
-        .modal-content { background-color: #fff; margin: 15% auto; padding: 20px; width: 80%; border-radius: 15px; }
-        .modal-input { width: 90%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; }
-
-        /* باقي التصميم كما هو */
+        /* شاشة الدخول */
         #auth-screen { padding: 30px; text-align: center; margin-top: 50px; }
         .auth-input { width: 90%; padding: 12px; margin: 10px 0; border: 1px solid var(--gold); border-radius: 8px; }
         .btn-main { background: var(--dark); color: white; width: 95%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        
+        /* الهيدر والبانر */
         .header { background: var(--dark); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--gold); }
         .menu-icon { color: var(--gold); font-size: 28px; cursor: pointer; }
         .logo-main { color: var(--gold); font-size: 24px; font-weight: bold; }
         .logo-sub { color: white; font-size: 12px; letter-spacing: 2px; }
+        .banner { text-align: center; padding: 15px; }
+        .badge { display: inline-block; background: white; padding: 5px 15px; border-radius: 20px; border: 1px solid var(--gold); color: var(--dark); font-size: 12px; font-weight: bold; }
+        .quote { color: var(--gold); font-style: italic; font-weight: bold; font-size: 14px; margin-top: 5px; }
+
+        /* الأصناف */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px; }
-        .card { background: white; border-radius: 12px; padding: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .card img { width: 100%; height: 120px; border-radius: 8px; object-fit: cover; background: #ddd; }
-        .price { color: var(--dark); font-weight: bold; font-size: 18px; }
+        .card { background: white; border-radius: 12px; padding: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .card img { width: 100%; height: 100px; border-radius: 8px; object-fit: cover; background: #ddd; }
+        .price { color: var(--dark); font-weight: bold; font-size: 16px; margin: 5px 0; }
         .btn-order { background: var(--dark); color: white; width: 100%; padding: 8px; border: none; border-radius: 6px; cursor: pointer; }
+
+        /* الناف بار والمدال */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; background: var(--dark); color: white; border-top: 2px solid var(--gold); }
-        .nav-item { flex: 1; text-align: center; padding: 15px; cursor: pointer; }
+        .nav-item { flex: 1; text-align: center; padding: 15px; cursor: pointer; font-weight: bold; }
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); overflow: auto; }
+        .modal-content { background-color: #fff; margin: 10% auto; padding: 20px; width: 85%; border-radius: 15px; text-align: center; }
+        .modal-input { width: 90%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; }
     </style>
 </head>
 <body>
 
-    <!-- السايد بار -->
     <div id="mySidebar" class="sidebar">
-        <span class="close-btn" onclick="closeSidebar()">&times;</span>
+        <span class="close-btn" onclick="document.getElementById('mySidebar').style.width='0'">&times;</span>
         <div class="sidebar-content">
-            <h3>مرحبًا بك في مطعم كريم الصافي</h3>
-            <p>تواصل معنا:</p>
+            <h3>مرحبًا بك</h3>
             <a href="#">فيسبوك</a>
             <a href="#">إنستجرام</a>
             <a href="#">واتساب</a>
         </div>
     </div>
 
-    <!-- شاشة تسجيل الدخول -->
     <div id="auth-screen">
         <h2 style="color: var(--dark);">تسجيل الدخول</h2>
         <input type="text" id="userName" class="auth-input" placeholder="الاسم بالكامل">
@@ -59,15 +63,22 @@
         <button onclick="window.handleAuth()" class="btn-main">دخول</button>
     </div>
 
-    <!-- التطبيق -->
     <div id="main-app" style="display:none;">
         <div class="header">
-            <div class="menu-icon" onclick="openSidebar()">☰</div>
+            <div class="menu-icon" onclick="document.getElementById('mySidebar').style.width='70%'">☰</div>
             <div style="text-align:center;">
                 <div class="logo-main">KARIM ELSAFY</div>
                 <div class="logo-sub">RESTAURANT</div>
             </div>
             <div style="width: 28px;"></div>
+        </div>
+
+        <div class="banner">
+            <h2 style="color: var(--dark);">أصناف الفطار</h2>
+            <div class="badge">صحتين وهنا 🌸</div>
+            <p class="quote">جميع الأصناف تشمل عصير فواكه طازج 🍓</p>
+            <!-- الخط الفاصل اللي طلبته -->
+            <hr style="border: 0; border-top: 1px solid var(--gold); margin: 20px 0; opacity: 0.5;">
         </div>
 
         <div class="grid" id="menu-grid"></div>
@@ -81,23 +92,27 @@
     <!-- مودال الطلب -->
     <div id="orderModal" class="modal">
         <div class="modal-content">
-            <h3>تأكيد الطلب</h3>
+            <h3>إتمام الطلب</h3>
             <input type="text" id="modalName" class="modal-input" placeholder="الاسم" disabled>
+            <input type="text" id="modalPhone" class="modal-input" placeholder="رقم التليفون للتواصل">
             <input type="text" id="modalAddress" class="modal-input" placeholder="العنوان">
-            <input type="text" id="modalTime" class="modal-input" placeholder="وقت الاستلام (مثال: 8:30)">
-            <p style="font-size:12px; color:red;">يرجى إرسال المبلغ على رقم فودافون كاش: 01012345678</p>
+            <input type="text" id="modalTime" class="modal-input" placeholder="ميعاد الاستلام">
+            
+            <div style="background:#f9f9f9; padding:10px; border:1px dashed var(--gold); margin:10px 0;">
+                <p style="font-size:12px; margin:0;">يرجى تحويل المبلغ على فودافون كاش:</p>
+                <b style="color:var(--dark);">01012345678</b>
+            </div>
             <input type="file" class="modal-input">
-            <button class="btn-main" onclick="submitOrder()">إرسال الطلب</button>
-            <button onclick="document.getElementById('orderModal').style.display='none'">إلغاء</button>
+            <button class="btn-main" onclick="submitOrder()">تأكيد الطلب</button>
+            <p onclick="document.getElementById('orderModal').style.display='none'" style="cursor:pointer; color:gray; margin-top:10px;">إلغاء</p>
         </div>
     </div>
 
-    <!-- مودال طلباتي -->
     <div id="ordersModal" class="modal">
         <div class="modal-content">
             <h3>طلباتي</h3>
-            <div id="ordersList"></div>
-            <button onclick="document.getElementById('ordersModal').style.display='none'">إغلاق</button>
+            <div id="ordersList" style="text-align:right;"></div>
+            <button onclick="document.getElementById('ordersModal').style.display='none'" class="btn-main" style="margin-top:20px;">إغلاق</button>
         </div>
     </div>
 
@@ -105,21 +120,26 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getDatabase, ref, set, get, push, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-        const firebaseConfig = { /* ... (نفس بياناتك) ... */ };
+        const firebaseConfig = {
+            apiKey: "AIzaSyAfWi4wxoPbw3mTFTj5Jh-xfKog2kB8Bkc",
+            authDomain: "karim-elsafy.firebaseapp.com",
+            projectId: "karim-elsafy",
+            storageBucket: "karim-elsafy.firebasestorage.app",
+            messagingSenderId: "1046325479843",
+            appId: "1:1046325479843:web:cf78c248826c67266ef216",
+            databaseURL: "https://karim-elsafy-default-rtdb.firebaseio.com"
+        };
+
         const db = getDatabase(initializeApp(firebaseConfig));
         
         let currentUser = JSON.parse(localStorage.getItem('karimUser'));
         let currentItem = {};
 
-        // التحكم في السايد بار
-        window.openSidebar = () => document.getElementById("mySidebar").style.width = "70%";
-        window.closeSidebar = () => document.getElementById("mySidebar").style.width = "0";
-
         // تسجيل الدخول
         window.handleAuth = async () => {
             const name = document.getElementById('userName').value;
             const phone = document.getElementById('userPhone').value;
-            if(!name || !phone) return alert("اكتب البيانات");
+            if(!name || !phone) return alert("اكتب الاسم ورقم التليفون");
             currentUser = { name, phone };
             localStorage.setItem('karimUser', JSON.stringify(currentUser));
             document.getElementById('auth-screen').style.display = 'none';
@@ -127,31 +147,50 @@
             loadMenu();
         };
 
-        // تحميل المنيو
+        // تحميل المنيو بكل الأصناف
         async function loadMenu() {
             const grid = document.getElementById('menu-grid');
-            // ... (نفس كود جلب المنتجات السابق)
-            // إضافة زر الطلب ليفتح المودال:
-            // onclick="openOrderModal('${item.name}', '${item.price}')"
+            grid.innerHTML = '';
+            const items = [
+                {name: "بيض بالبسطرمة", price: "70", desc: "بيض طازج مع شرائح البسطرمة الممتازة"},
+                {name: "لانشون حلواني", price: "65", desc: "شرائح لانشون حلواني بقرى فاخر"},
+                {name: "بيض مقلي", price: "70", desc: "بيض مقلي بالسمن البلدي"},
+                {name: "لانشون تركي", price: "65", desc: "شرائح لانشون ديك رومي مدخن"},
+                {name: "بلوفيف بالبيض", price: "70", desc: "كروسان محشو بالبلوفيف وبيض مقلي"},
+                {name: "جبنة رومي", price: "65", desc: "شرائح جبنة رومي قديمة ومعتقة"},
+                {name: "حلاوة بالقشطة", price: "65", desc: "حلاوة طحينية فاخرة مع قشطة طازجة"},
+                {name: "مربي بالقشطة", price: "65", desc: "مربى فراولة غنية مع القشطة الفلاحي"}
+            ];
+            items.forEach(item => {
+                grid.innerHTML += `
+                    <div class="card">
+                        <img src="https://via.placeholder.com/150" alt="${item.name}">
+                        <h4>${item.name}</h4>
+                        <div class="price">${item.price} جنيه</div>
+                        <button class="btn-order" onclick="openOrderModal('${item.name}', '${item.price}')">طلب</button>
+                    </div>
+                `;
+            });
         }
 
         window.openOrderModal = (name, price) => {
             currentItem = { name, price };
             document.getElementById('modalName').value = currentUser.name;
+            document.getElementById('modalPhone').value = currentUser.phone; // ماليء الرقم تلقائي
             document.getElementById('orderModal').style.display = 'block';
         };
 
         window.submitOrder = async () => {
             const orderData = {
                 customerName: currentUser.name,
-                customerPhone: currentUser.phone,
+                customerPhone: document.getElementById('modalPhone').value, // بياخد الرقم الجديد لو العميل غيره
                 item: currentItem.name,
                 address: document.getElementById('modalAddress').value,
                 time: document.getElementById('modalTime').value,
                 status: 'قيد التحضير'
             };
             await push(ref(db, 'orders'), orderData);
-            alert("تم إرسال طلبك!");
+            alert("تم إرسال طلبك بنجاح!");
             document.getElementById('orderModal').style.display = 'none';
         };
 
@@ -164,14 +203,13 @@
             if(snapshot.exists()) {
                 snapshot.forEach(child => {
                     const order = child.val();
-                    list.innerHTML += `<p>طلب: ${order.item} - الحالة: ${order.status}</p>`;
+                    list.innerHTML += `<div style="border-bottom:1px solid #ddd; padding:10px;">${order.item} - الحالة: ${order.status}</div>`;
                 });
             } else {
                 list.innerHTML = "لا يوجد طلبات حالية.";
             }
         };
         
-        // تفعيل الإظهار عند الدخول
         if(currentUser) { 
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
